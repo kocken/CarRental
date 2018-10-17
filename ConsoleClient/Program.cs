@@ -1,48 +1,54 @@
 ﻿using Logic;
+using Storage;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleClient
 {
     class Program
     {
+        static BusinessLogic Logic = new BusinessLogic();
+        static string[] Commands = new string[] { "Quit", "Clear", "AddCar", "GetAvailableCars" };
+
         static void Main(string[] args)
         {
-            BusinessLogic logic = new BusinessLogic();
-            string[] commands = new string[] { "Clear", "Quit", "TestCount", "AddCar" };
-
-            while(true)
+            while (true)
             {
                 Console.WriteLine("What would you like to do?");
                 Console.WriteLine("[COMMANDS]");
-                foreach(string s in commands)
+                foreach(string s in Commands)
                 {
                     Console.WriteLine(s);
                 }
                 Console.WriteLine();
                 string input = Console.ReadLine();
-                if (commands.Any(c => c.ToLower() == input.ToLower()))
+                if (!Commands.Any(c => c.ToLower() == input.ToLower()))
+                {
+                    Console.WriteLine($"\"{input}\" is not supported, use an alternative from the command list");
+                }
+                else
                 {
                     input = input.ToLower();
-                    switch(input) {
+                    switch (input)
+                    {
+                        case "quit":
+                            return;
                         case "clear":
                             Console.Clear();
                             break;
-                        case "quit":
-                            return;
                         case "addcar":
-                            logic.AddCar(GetStringParameter("registration number"), GetStringParameter("brand"), 
+                            Logic.AddCar(GetStringParameter("registration number"), GetStringParameter("brand"),
                                 GetStringParameter("model"), GetIntParameter("year"));
                             Console.WriteLine("Added car");
+                            break;
+                        case "getavailablecars":
+                            List<Car> cars = Logic.GetAvailableCars(GetDateTimeParameter("from date"), GetDateTimeParameter("to date"));
                             break;
                         default:
                             Console.WriteLine($"There's no current support for command \"{input}\"");
                             break;
                     }
-                }
-                else
-                {
-                    Console.WriteLine($"\"{input}\" is not supported, use an alternative from the command list");
                 }
                 Console.WriteLine();
             }
@@ -80,6 +86,30 @@ namespace ConsoleClient
                     else
                     {
                         Console.WriteLine("Wrong input, a valid number is required");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("A valid input is required");
+                }
+            }
+        }
+
+        public static DateTime GetDateTimeParameter(string parameterName)
+        {
+            while (true)
+            {
+                Console.WriteLine($"Assign a \"{parameterName}\" parameter (Type: DateTime - assign value in format year-month-day)");
+                string input = Console.ReadLine();
+                if (input.Length > 0)
+                {
+                    if (DateTime.TryParse(input, out DateTime date))
+                    {
+                        return date;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wrong input, a valid date is required (format: year-month-day)");
                     }
                 }
                 else
