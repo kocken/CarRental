@@ -14,9 +14,14 @@ namespace Storage
 
         public override string ToString()
         {
-            return (ReturnTime != null ? "[RETURNED]" : "[ACTIVE]") + 
+            return (ReturnTime != default(DateTime) ? "[RETURNED]" : "[ACTIVE]") + 
                 $" {Customer.FirstName} {Customer.LastName} " +
                 $"{StartTime}-{EndTime} {Car.ToString()}";
+        }
+
+        public bool IsStarted()
+        {
+            return DateTime.Now >= StartTime;
         }
     }
 }

@@ -10,19 +10,15 @@ namespace Logic
     {
         Data Data = new Data();
 
-        public List<Car> GetCars()
-        {
-            return Data.Cars;
-        }
-
         public List<Customer> GetCustomers()
         {
             return Data.Customers;
         }
 
-        public List<Booking> GetBookings()
+        public List<Booking> GetActiveBookings(bool isStarted)
         {
-            return Data.Bookings;
+            return Data.Bookings.Where(b => 
+            b.ReturnTime == default(DateTime) && (isStarted ? b.IsStarted() : !b.IsStarted())).ToList();
         }
 
         public void AddCar(string registrationNumber, string brand, string model, int year)
@@ -72,14 +68,15 @@ namespace Logic
                 throw new ArgumentException();
             }
 
-            List<Car> cars = Data.Cars; // all cars
+            List<Car> cars = Data.Cars.ToList(); // all cars
             // the LINQ expression below gets bookings that are during the "fromDate" and "toDate" parameters
-            List<Booking> bookings = Data.Bookings.Where(b =>
+            List<Booking> currentActiveBookings = Data.Bookings.Where(b =>
                 (b.StartTime >= fromDate && b.StartTime <= toDate || // if booking start time is within the fromDate to toDate timespan
-                b.EndTime >= fromDate && b.EndTime <= toDate) && // if booking end time is within the fromDate to toDate timespan
-                b.ReturnTime == null) // if customer have not returned car
+                b.EndTime >= fromDate && b.EndTime <= toDate || // if booking end time is within the fromDate to toDate timespan
+                b.StartTime <= fromDate && b.EndTime >= toDate) && // if booking covers the whole timespan
+                b.ReturnTime == default(DateTime)) // if customer have not returned car
                 .ToList();
-            foreach (Booking b in bookings)
+            foreach (Booking b in currentActiveBookings)
             {
                 if (cars.Contains(b.Car)) // failsafe
                 {
@@ -91,7 +88,10 @@ namespace Logic
 
         public void CreateBooking(Car car, Customer customer, DateTime startTime, DateTime endTime)
         {
-            if (car == null || customer == null || startTime == null || endTime == null || startTime > endTime)
+            List<Car> availableCars = GetAvailableCars(startTime, endTime);
+            if (car == null || customer == null || startTime == null || endTime == null || startTime > endTime ||
+                !Data.Cars.Contains(car) || !Data.Customers.Contains(customer) || 
+                !availableCars.Contains(car)) // makes sure car is available
             {
                 throw new ArgumentException();
             }
@@ -108,7 +108,8 @@ namespace Logic
 
         public void RemoveBooking(Booking booking)
         {
-            if (booking == null)
+            if (booking == null || !Data.Bookings.Contains(booking) ||
+                DateTime.Now >= booking.StartTime && booking.ReturnTime == default(DateTime)) // booking is active and did not return car
             {
                 throw new ArgumentException();
             }
@@ -118,7 +119,8 @@ namespace Logic
         
         public void ReturnCar(Booking booking)
         {
-            if (booking == null)
+            if (booking == null || !Data.Bookings.Contains(booking) || 
+                booking.ReturnTime != default(DateTime)) // already returned car
             {
                 throw new ArgumentException();
             }

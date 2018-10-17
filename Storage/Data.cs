@@ -81,8 +81,8 @@ namespace Storage
                 Customer = Customers[0],
                 Car = Cars[0],
                 StartTime = new DateTime(2018, 1, 18),
-                EndTime = new DateTime(2018, 1, 25)
-
+                EndTime = new DateTime(2018, 1, 25),
+                ReturnTime = new DateTime(2018, 1, 25)
             });
 
             Bookings.Add(new Booking
@@ -90,8 +90,8 @@ namespace Storage
                 Customer = Customers[1],
                 Car = Cars[1],
                 StartTime = new DateTime(2018, 5, 1),
-                EndTime = new DateTime(2018, 5, 5)
-
+                EndTime = new DateTime(2018, 5, 5),
+                ReturnTime = new DateTime(2018, 5, 5)
             });
 
             Bookings.Add(new Booking
@@ -99,8 +99,8 @@ namespace Storage
                 Customer = Customers[2],
                 Car = Cars[2],
                 StartTime = new DateTime(2018, 3, 5),
-                EndTime = new DateTime(2018, 3, 8)
-
+                EndTime = new DateTime(2018, 3, 8),
+                ReturnTime = new DateTime(2018, 3, 8)
             });
 
             Bookings.Add(new Booking
@@ -108,8 +108,17 @@ namespace Storage
                 Customer = Customers[3],
                 Car = Cars[3],
                 StartTime = new DateTime(2018, 9, 1),
-                EndTime = new DateTime(2018, 9, 10)
+                EndTime = new DateTime(2018, 9, 10),
+                ReturnTime = new DateTime(2018, 9, 10)
+            });
 
+            Bookings.Add(new Booking
+            {
+                Customer = Customers[0],
+                Car = Cars[0],
+                StartTime = new DateTime(2018, 10, 17),
+                EndTime = new DateTime(2018, 10, 27),
+                ReturnTime = default(DateTime)
             });
         }
     }
