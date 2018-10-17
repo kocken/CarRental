@@ -41,39 +41,22 @@ namespace Logic
             );
         }
 
-        public void RemoveCar(string registrationNumber, string brand, string model, int year)
-        {
-            if (registrationNumber == null || registrationNumber.Length != 6 ||
-                brand == null || brand.Length == 0 ||
-                model == null || model.Length == 0 ||
-                year < 1900 || year > DateTime.Now.Year)
-            {
-                throw new ArgumentException();
-            }
-            Data.Cars.Remove(
-               new Car
-               {
-                   RegistrationNumber = registrationNumber,
-                   Brand = brand,
-                   Model = model,
-                   Year = year
-               }
-           );
-
-
-        }
-
-        public void AddCustomer()
+        public void RemoveCar(Car car) // remove existing object as done in #RemoveBooking below
         {
 
         }
 
-        public void ChangeCustomer()
+        public void AddCustomer() // add new object (with string parameters) as done in #AddCar above
         {
 
         }
 
-        public void RemoveCustomer()
+        public void ChangeCustomer(Customer customer) // change existing object as done in #ReturnCar below
+        {
+
+        }
+
+        public void RemoveCustomer(Customer customer) // remove existing object as done in #RemoveBooking below
         {
 
         }
@@ -142,7 +125,7 @@ namespace Logic
                 throw new ArgumentException();
             }
 
-            booking.ReturnTime = DateTime.Now; // TODO: double check that list is being updated with return time
+            booking.ReturnTime = DateTime.Now;
         }
     }
 }
