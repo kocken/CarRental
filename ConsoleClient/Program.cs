@@ -30,37 +30,7 @@ namespace ConsoleClient
                 else
                 {
                     input = input.ToLower();
-                    switch (input)
-                    {
-                        case "quit":
-                            return;
-                        case "clear":
-                            Console.Clear();
-                            break;
-                        case "addcar":
-                            Logic.AddCar(GetStringParameter("registration number"), GetStringParameter("brand"),
-                                GetStringParameter("model"), GetIntParameter("year"));
-                            Console.WriteLine("Added car");
-                            break;
-                        case "getavailablecars":
-                            List<Car> cars = Logic.GetAvailableCars(GetDateTimeParameter("from date"), GetDateTimeParameter("to date"));
-                            if (cars.Count == 0)
-                            {
-                                Console.WriteLine("No available cars");
-                            }
-                            else
-                            {
-                                Console.WriteLine("[AVAILABLE CARS]");
-                                foreach (Car c in cars)
-                                {
-                                    Console.WriteLine(c.ToString());
-                                }
-                            }
-                            break;
-                        default:
-                            Console.WriteLine($"There's no current support for command \"{input}\"");
-                            break;
-                    }
+                    ExecuteCommand(input);
                 }
                 if (input != "clear")
                 {
@@ -69,11 +39,51 @@ namespace ConsoleClient
             }
         }
 
-        public static string GetStringParameter(string parameterName)
+        static void ExecuteCommand(string command)
+        {
+            switch (command)
+            {
+                case "quit":
+                    return;
+                case "clear":
+                    Console.Clear();
+                    break;
+                case "addcar":
+                    Logic.AddCar(
+                        GetStringParameterInput("registration number"),
+                        GetStringParameterInput("brand"),
+                        GetStringParameterInput("model"),
+                        GetIntParameterInput("year"));
+                    Console.WriteLine("Added car");
+                    break;
+                case "getavailablecars":
+                    List<Car> cars = Logic.GetAvailableCars(
+                        GetDateTimeParameterInput("from date"),
+                        GetDateTimeParameterInput("to date"));
+                    if (cars.Count == 0)
+                    {
+                        Console.WriteLine("No available cars");
+                    }
+                    else
+                    {
+                        Console.WriteLine("[AVAILABLE CARS]");
+                        foreach (Car c in cars)
+                        {
+                            Console.WriteLine(c.ToString());
+                        }
+                    }
+                    break;
+                default:
+                    Console.WriteLine($"There's no current support for command \"{command}\"");
+                    break;
+            }
+        }
+
+        public static string GetStringParameterInput(string parameterName)
         {
             while(true)
             {
-                Console.WriteLine($"Assign a \"{parameterName}\" parameter (Type: string)");
+                Console.WriteLine($"Assign the \"{parameterName}\" parameter (Type: string)");
                 string input = Console.ReadLine();
                 if (input.Length > 0)
                 {
@@ -86,11 +96,11 @@ namespace ConsoleClient
             }
         }
 
-        public static int GetIntParameter(string parameterName)
+        public static int GetIntParameterInput(string parameterName)
         {
             while (true)
             {
-                Console.WriteLine($"Assign a \"{parameterName}\" parameter (Type: int)");
+                Console.WriteLine($"Assign the \"{parameterName}\" parameter (Type: int)");
                 string input = Console.ReadLine();
                 if (input.Length > 0)
                 {
@@ -110,11 +120,11 @@ namespace ConsoleClient
             }
         }
 
-        public static DateTime GetDateTimeParameter(string parameterName)
+        public static DateTime GetDateTimeParameterInput(string parameterName)
         {
             while (true)
             {
-                Console.WriteLine($"Assign a \"{parameterName}\" parameter (Type: DateTime - assign value in format year-month-day)");
+                Console.WriteLine($"Assign the \"{parameterName}\" parameter (Type: DateTime - assign value in format year-month-day)");
                 string input = Console.ReadLine();
                 if (input.Length > 0)
                 {
@@ -125,6 +135,45 @@ namespace ConsoleClient
                     else
                     {
                         Console.WriteLine("Wrong input, a valid date is required (format: year-month-day)");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("A valid input is required");
+                }
+            }
+        }
+
+        public static T GetObjectFromListInput<T>(List<T> list, string parameterName)
+        {
+            if (list.Count == 0)
+            {
+                return default(T);
+            }
+            while (true)
+            {
+                Console.WriteLine($"Assign the \"{parameterName}\" parameter by selecting a number from the list");
+                for (int i = 0; i < list.Count; i++)
+                {
+                    Console.WriteLine((i+1) + ": " + list[i].ToString());
+                }
+                string input = Console.ReadLine();
+                if (input.Length > 0)
+                {
+                    if (Int32.TryParse(input, out int number))
+                    {
+                        if (number >= 1 && number <= (list.Count))
+                        {
+                            return list[number - 1];
+                        }
+                        else
+                        {
+                            Console.WriteLine("Wrong input, enter a number from 1 to " + (list.Count));
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wrong input, a valid number is required");
                     }
                 }
                 else

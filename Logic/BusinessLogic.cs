@@ -10,6 +10,21 @@ namespace Logic
     {
         Data Data = new Data();
 
+        public List<Car> GetCars()
+        {
+            return Data.Cars;
+        }
+
+        public List<Customer> GetCustomers()
+        {
+            return Data.Customers;
+        }
+
+        public List<Booking> GetBookings()
+        {
+            return Data.Bookings;
+        }
+
         public void AddCar(string registrationNumber, string brand, string model, int year)
         {
             Data.Cars.Add(
