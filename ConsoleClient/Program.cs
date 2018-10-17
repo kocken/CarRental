@@ -30,9 +30,6 @@ namespace ConsoleClient
                             break;
                         case "quit":
                             return;
-                        case "testcount":
-                            Console.WriteLine(logic.TestCount());
-                            break;
                         case "addcar":
                             logic.AddCar(GetStringParameter("registration number"), GetStringParameter("brand"), 
                                 GetStringParameter("model"), GetIntParameter("year"));
