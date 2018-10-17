@@ -4,7 +4,11 @@ using System.Text;
 
 namespace Logic
 {
-    class BusinessLogic
+    public class BusinessLogic
     {
+        public int TestCount() // just a test for console app
+        {
+            return 3;
+        }
     }
 }

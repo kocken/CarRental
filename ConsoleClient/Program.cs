@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logic;
+using System;
 using System.Linq;
 
 namespace ConsoleClient
@@ -7,11 +8,13 @@ namespace ConsoleClient
     {
         static void Main(string[] args)
         {
-            string[] commands = new string[] { "quit" };
+            BusinessLogic logic = new BusinessLogic();
+            string[] commands = new string[] { "quit", "testcount" };
+
             while(true)
             {
                 Console.WriteLine("What would you like to do?");
-                Console.WriteLine("Commands:");
+                Console.WriteLine("[COMMANDS]");
                 foreach(string s in commands)
                 {
                     Console.WriteLine(s);
@@ -23,6 +26,9 @@ namespace ConsoleClient
                     switch(input) {
                         case "quit":
                             return;
+                        case "testcount":
+                            Console.WriteLine(logic.TestCount());
+                            break;
                         default:
                             Console.WriteLine($"There's no current support for command \"{input}\"");
                             break;
