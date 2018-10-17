@@ -3,6 +3,7 @@ using Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TestClient;
 
 namespace ConsoleClient
 {
@@ -26,7 +27,7 @@ namespace ConsoleClient
                 string input = Console.ReadLine();
                 if (!Commands.Any(c => c.ToLower() == input.ToLower()))
                 {
-                    Console.WriteLine($"\"{input}\" is not supported, use an alternative from the command list");
+                    Console.WriteLine($"\"{input}\" is not a valid command, choose an option from the command list");
                 }
                 else
                 {
@@ -81,7 +82,11 @@ namespace ConsoleClient
                         break;
 
                     case "createbooking":
-
+                        Logic.CreateBooking(
+                            GetObjectFromListInput(Logic.GetCars(), "car"),
+                            GetObjectFromListInput(Logic.GetCustomers(), "customer"), 
+                            GetDateTimeParameterInput("booking start time"),
+                            GetDateTimeParameterInput("booking end time"));
                         break;
 
                     default:
@@ -92,6 +97,10 @@ namespace ConsoleClient
             catch (ArgumentException)
             {
                 Console.WriteLine("Invalid method parameters.");
+            }
+            catch (EmptyListException e)
+            {
+                Console.WriteLine("Failed to execute command. " + e.Message);
             }
         }
 
@@ -164,7 +173,7 @@ namespace ConsoleClient
         {
             if (list.Count == 0)
             {
-                return default(T);
+                throw new EmptyListException($"There's no available \"{parameterName}\" choices.");
             }
             while (true)
             {
