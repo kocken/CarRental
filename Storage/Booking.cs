@@ -11,5 +11,12 @@ namespace Storage
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public DateTime ReturnTime { get; set; }
+
+        public override string ToString()
+        {
+            return (ReturnTime != null ? "[RETURNED]" : "[ACTIVE]") + 
+                $" {Customer.FirstName} {Customer.LastName} " +
+                $"{StartTime}-{EndTime} {Car.ToString()}";
+        }
     }
 }

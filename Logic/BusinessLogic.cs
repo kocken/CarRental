@@ -27,6 +27,14 @@ namespace Logic
 
         public void AddCar(string registrationNumber, string brand, string model, int year)
         {
+            if (registrationNumber == null || registrationNumber.Length != 6 ||
+                brand == null || brand.Length == 0 || 
+                model == null || model.Length == 0 || 
+                year < 1900 || year > DateTime.Now.Year)
+            {
+                throw new ArgumentException();
+            }
+
             Data.Cars.Add(
                 new Car {
                     RegistrationNumber = registrationNumber,
@@ -60,6 +68,11 @@ namespace Logic
         // Mikael tar från här och neråt
         public List<Car> GetAvailableCars(DateTime fromDate, DateTime toDate)
         {
+            if (fromDate == null || toDate == null || fromDate > toDate)
+            {
+                throw new ArgumentException();
+            }
+
             List<Car> cars = Data.Cars; // all cars
             // the LINQ expression below gets bookings that are during the "fromDate" and "toDate" parameters
             List<Booking> bookings = Data.Bookings.Where(b =>
@@ -79,6 +92,11 @@ namespace Logic
 
         public void CreateBooking(Car car, Customer customer, DateTime startTime, DateTime endTime)
         {
+            if (car == null || customer == null || startTime == null || endTime == null || startTime > endTime)
+            {
+                throw new ArgumentException();
+            }
+
             Data.Bookings.Add(
                 new Booking {
                     Car = car,
@@ -91,11 +109,21 @@ namespace Logic
 
         public void RemoveBooking(Booking booking)
         {
+            if (booking == null)
+            {
+                throw new ArgumentException();
+            }
+
             Data.Bookings.Remove(booking);
         }
         
         public void ReturnCar(Booking booking)
         {
+            if (booking == null)
+            {
+                throw new ArgumentException();
+            }
+
             booking.ReturnTime = DateTime.Now; // TODO: double check that list is being updated with return time
         }
     }

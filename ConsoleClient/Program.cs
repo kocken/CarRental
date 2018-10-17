@@ -9,7 +9,8 @@ namespace ConsoleClient
     class Program
     {
         static BusinessLogic Logic = new BusinessLogic();
-        static string[] Commands = new string[] { "Quit", "Clear", "AddCar", "GetAvailableCars" };
+        static string[] Commands = new string[] { "Quit", "Clear",
+            "AddCar", "GetAvailableCars", "CreateBooking" };
 
         static void Main(string[] args)
         {
@@ -41,41 +42,56 @@ namespace ConsoleClient
 
         static void ExecuteCommand(string command)
         {
-            switch (command)
+            try
             {
-                case "quit":
-                    return;
-                case "clear":
-                    Console.Clear();
-                    break;
-                case "addcar":
-                    Logic.AddCar(
-                        GetStringParameterInput("registration number"),
-                        GetStringParameterInput("brand"),
-                        GetStringParameterInput("model"),
-                        GetIntParameterInput("year"));
-                    Console.WriteLine("Added car");
-                    break;
-                case "getavailablecars":
-                    List<Car> cars = Logic.GetAvailableCars(
-                        GetDateTimeParameterInput("from date"),
-                        GetDateTimeParameterInput("to date"));
-                    if (cars.Count == 0)
-                    {
-                        Console.WriteLine("No available cars");
-                    }
-                    else
-                    {
-                        Console.WriteLine("[AVAILABLE CARS]");
-                        foreach (Car c in cars)
+                switch (command)
+                {
+                    case "quit":
+                        return;
+
+                    case "clear":
+                        Console.Clear();
+                        break;
+
+                    case "addcar":
+                        Logic.AddCar(
+                            GetStringParameterInput("registration number"),
+                            GetStringParameterInput("brand"),
+                            GetStringParameterInput("model"),
+                            GetIntParameterInput("year"));
+                        Console.WriteLine("Added car");
+                        break;
+
+                    case "getavailablecars":
+                        List<Car> cars = Logic.GetAvailableCars(
+                            GetDateTimeParameterInput("from date"),
+                            GetDateTimeParameterInput("to date"));
+                        if (cars.Count == 0)
                         {
-                            Console.WriteLine(c.ToString());
+                            Console.WriteLine("No available cars");
                         }
-                    }
-                    break;
-                default:
-                    Console.WriteLine($"There's no current support for command \"{command}\"");
-                    break;
+                        else
+                        {
+                            Console.WriteLine("[AVAILABLE CARS]");
+                            foreach (Car c in cars)
+                            {
+                                Console.WriteLine(c.ToString());
+                            }
+                        }
+                        break;
+
+                    case "createbooking":
+
+                        break;
+
+                    default:
+                        Console.WriteLine($"There's no current support for command \"{command}\"");
+                        break;
+                }
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("Invalid method parameters.");
             }
         }
 
