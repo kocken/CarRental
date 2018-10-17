@@ -62,7 +62,10 @@ namespace ConsoleClient
                             break;
                     }
                 }
-                Console.WriteLine();
+                if (input != "clear")
+                {
+                    Console.WriteLine(); // adds some spacing between command input
+                }
             }
         }
 

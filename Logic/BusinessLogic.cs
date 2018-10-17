@@ -12,7 +12,8 @@ namespace Logic
 
         public void AddCar(string registrationNumber, string brand, string model, int year)
         {
-            Data.Cars.Add(new Car {
+            Data.Cars.Add(
+                new Car {
                     RegistrationNumber = registrationNumber,
                     Brand = brand,
                     Model = model,
@@ -47,12 +48,13 @@ namespace Logic
             List<Car> cars = Data.Cars; // all cars
             // the LINQ expression below gets bookings that are during the "fromDate" and "toDate" parameters
             List<Booking> bookings = Data.Bookings.Where(b =>
-                b.StartTime >= fromDate && b.StartTime <= toDate || // if booking start time is within the fromDate to toDate timespan
-                b.EndTime >= fromDate && b.EndTime <= toDate) // if booking end time is within the fromDate to toDate timespan
+                (b.StartTime >= fromDate && b.StartTime <= toDate || // if booking start time is within the fromDate to toDate timespan
+                b.EndTime >= fromDate && b.EndTime <= toDate) && // if booking end time is within the fromDate to toDate timespan
+                b.ReturnTime == null) // if customer have not returned car
                 .ToList();
             foreach (Booking b in bookings)
             {
-                if (cars.Contains(b.Car)) // if the car-object have not already been removed
+                if (cars.Contains(b.Car)) // failsafe
                 {
                     cars.Remove(b.Car);
                 }
@@ -60,19 +62,26 @@ namespace Logic
             return cars; // available cars (with occupied ones from bookings removed)
         }
 
-        public void CreateBooking()
+        public void CreateBooking(Car car, Customer customer, DateTime startTime, DateTime endTime)
         {
-
+            Data.Bookings.Add(
+                new Booking {
+                    Car = car,
+                    Customer = customer,
+                    StartTime = startTime,
+                    EndTime = endTime
+                }
+            );
         }
 
-        public void RemoveBooking()
+        public void RemoveBooking(Booking booking)
         {
-
+            Data.Bookings.Remove(booking);
         }
         
-        public void ReturnCar()
+        public void ReturnCar(Booking booking)
         {
-
+            booking.ReturnTime = DateTime.Now; // TODO: double check that list is being updated with return time
         }
     }
 }
