@@ -14,9 +14,9 @@ namespace Logic
             return 3;
         }
 
-        public void AddCar()
+        public void AddCar(string registrationNumber, string brand, string model, int year)
         {
-            Data.Cars.Add(new Car { });
+            Data.Cars.Add(new Car { RegistrationNumber = registrationNumber, Brand = brand, Model = model, Year = year });
         }
 
         public void RemoveCar()
