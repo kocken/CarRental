@@ -9,7 +9,7 @@ namespace ConsoleClient
         static void Main(string[] args)
         {
             BusinessLogic logic = new BusinessLogic();
-            string[] commands = new string[] { "quit", "testcount" };
+            string[] commands = new string[] { "Quit", "TestCount" };
 
             while(true)
             {
@@ -21,7 +21,7 @@ namespace ConsoleClient
                 }
                 Console.WriteLine();
                 string input = Console.ReadLine();
-                if (commands.Any(c => c == input))
+                if (commands.Any(c => c.ToLower() == input.ToLower()))
                 {
                     switch(input) {
                         case "quit":

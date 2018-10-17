@@ -10,5 +10,50 @@ namespace Logic
         {
             return 3;
         }
+
+        public void AddCar()
+        {
+
+        }
+
+        public void RemoveCar()
+        {
+
+        }
+
+        public void AddCustomer()
+        {
+
+        }
+
+        public void ChangeCustomer()
+        {
+
+        }
+
+        public void RemoveCustomer()
+        {
+
+        }
+
+        public void ShowBookings()
+        {
+
+        }
+
+        public void CreateBooking()
+        {
+
+        }
+
+        public void RemoveBooking()
+        {
+
+        }
+        
+        public void ReturnCar()
+        {
+
+        }
     }
 }
