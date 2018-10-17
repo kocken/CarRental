@@ -44,6 +44,18 @@ namespace ConsoleClient
                             break;
                         case "getavailablecars":
                             List<Car> cars = Logic.GetAvailableCars(GetDateTimeParameter("from date"), GetDateTimeParameter("to date"));
+                            if (cars.Count == 0)
+                            {
+                                Console.WriteLine("No available cars");
+                            }
+                            else
+                            {
+                                Console.WriteLine("[AVAILABLE CARS]");
+                                foreach (Car c in cars)
+                                {
+                                    Console.WriteLine(c.ToString());
+                                }
+                            }
                             break;
                         default:
                             Console.WriteLine($"There's no current support for command \"{input}\"");
