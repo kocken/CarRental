@@ -39,6 +39,7 @@ namespace Logic
 
         }
 
+        // Mikael tar dessa och neråt
         public void ShowBookings()
         {
 
