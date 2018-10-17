@@ -65,7 +65,6 @@ namespace Logic
 
         }
 
-        // Mikael tar från här och neråt
         public List<Car> GetAvailableCars(DateTime fromDate, DateTime toDate)
         {
             if (fromDate == null || toDate == null || fromDate > toDate)

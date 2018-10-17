@@ -11,7 +11,7 @@ namespace ConsoleClient
     {
         static BusinessLogic Logic = new BusinessLogic();
         static string[] Commands = new string[] { "Quit", "Clear",
-            "AddCar", "GetAvailableCars", "CreateBooking" };
+            "AddCar", "GetAvailableCars", "CreateBooking", "RemoveBooking", "ReturnCar" };
 
         static void Main(string[] args)
         {
@@ -87,6 +87,17 @@ namespace ConsoleClient
                             GetObjectFromListInput(Logic.GetCustomers(), "customer"), 
                             GetDateTimeParameterInput("booking start time"),
                             GetDateTimeParameterInput("booking end time"));
+                        Console.WriteLine("Created booking");
+                        break;
+
+                    case "removebooking":
+                        Logic.RemoveBooking(GetObjectFromListInput(Logic.GetBookings(), "booking"));
+                        Console.WriteLine("Removed booking");
+                        break;
+
+                    case "returncar":
+                        Logic.ReturnCar(GetObjectFromListInput(Logic.GetBookings(), "booking"));
+                        Console.WriteLine("Returned car");
                         break;
 
                     default:
