@@ -45,8 +45,25 @@ namespace Logic
             );
         }
 
-        public void RemoveCar()
+        public void RemoveCar(string registrationNumber, string brand, string model, int year)
         {
+            if (registrationNumber == null || registrationNumber.Length != 6 ||
+                brand == null || brand.Length == 0 ||
+                model == null || model.Length == 0 ||
+                year < 1900 || year > DateTime.Now.Year)
+            {
+                throw new ArgumentException();
+            }
+            Data.Cars.Remove(
+               new Car
+               {
+                   RegistrationNumber = registrationNumber,
+                   Brand = brand,
+                   Model = model,
+                   Year = year
+               }
+           );
+
 
         }
 
