@@ -10,15 +10,19 @@ namespace Logic
     {
         Data Data = new Data();
 
+        public List<Car> GetCars()
+        {
+            return Data.Cars;
+        }
+
         public List<Customer> GetCustomers()
         {
             return Data.Customers;
         }
 
-        public List<Booking> GetActiveBookings(bool isStarted)
+        public List<Booking> GetBookings()
         {
-            return Data.Bookings.Where(b => 
-            b.ReturnTime == default(DateTime) && (isStarted ? b.IsStarted() : !b.IsStarted())).ToList();
+            return Data.Bookings;
         }
 
         public void AddCar(string registrationNumber, string brand, string model, int year)
@@ -41,22 +45,29 @@ namespace Logic
             );
         }
 
-        public void RemoveCar(Car car) // remove existing object as done in #RemoveBooking below
+        public void RemoveCar(Car car)
+        {
+            if (car.RegistrationNumber == null || car.RegistrationNumber.Length != 6 ||
+                car.Brand == null || car.Brand.Length == 0 ||
+                car.Model == null || car.Model.Length == 0 ||
+                car.Year < 1900 || car.Year > DateTime.Now.Year)
+            {
+                throw new ArgumentException();
+            }
+            Data.Cars.Remove(car); 
+        }
+
+        public void AddCustomer()
         {
 
         }
 
-        public void AddCustomer() // add new object (with string parameters) as done in #AddCar above
+        public void ChangeCustomer()
         {
 
         }
 
-        public void ChangeCustomer(Customer customer) // change existing object as done in #ReturnCar below
-        {
-
-        }
-
-        public void RemoveCustomer(Customer customer) // remove existing object as done in #RemoveBooking below
+        public void RemoveCustomer()
         {
 
         }
@@ -70,13 +81,12 @@ namespace Logic
 
             List<Car> cars = Data.Cars.ToList(); // all cars
             // the LINQ expression below gets bookings that are during the "fromDate" and "toDate" parameters
-            List<Booking> currentActiveBookings = Data.Bookings.Where(b =>
+            List<Booking> bookings = Data.Bookings.Where(b =>
                 (b.StartTime >= fromDate && b.StartTime <= toDate || // if booking start time is within the fromDate to toDate timespan
-                b.EndTime >= fromDate && b.EndTime <= toDate || // if booking end time is within the fromDate to toDate timespan
-                b.StartTime <= fromDate && b.EndTime >= toDate) && // if booking covers the whole timespan
-                b.ReturnTime == default(DateTime)) // if customer have not returned car
+                b.EndTime >= fromDate && b.EndTime <= toDate) && // if booking end time is within the fromDate to toDate timespan
+                b.ReturnTime == null) // if customer have not returned car
                 .ToList();
-            foreach (Booking b in currentActiveBookings)
+            foreach (Booking b in bookings)
             {
                 if (cars.Contains(b.Car)) // failsafe
                 {
@@ -88,10 +98,7 @@ namespace Logic
 
         public void CreateBooking(Car car, Customer customer, DateTime startTime, DateTime endTime)
         {
-            List<Car> availableCars = GetAvailableCars(startTime, endTime);
-            if (car == null || customer == null || startTime == null || endTime == null || startTime > endTime ||
-                !Data.Cars.Contains(car) || !Data.Customers.Contains(customer) || 
-                !availableCars.Contains(car)) // makes sure car is available
+            if (car == null || customer == null || startTime == null || endTime == null || startTime > endTime)
             {
                 throw new ArgumentException();
             }
@@ -108,8 +115,7 @@ namespace Logic
 
         public void RemoveBooking(Booking booking)
         {
-            if (booking == null || !Data.Bookings.Contains(booking) ||
-                DateTime.Now >= booking.StartTime && booking.ReturnTime == default(DateTime)) // booking is active and did not return car
+            if (booking == null)
             {
                 throw new ArgumentException();
             }
@@ -119,13 +125,14 @@ namespace Logic
         
         public void ReturnCar(Booking booking)
         {
-            if (booking == null || !Data.Bookings.Contains(booking) || 
-                booking.ReturnTime != default(DateTime)) // already returned car
+            if (booking == null)
             {
                 throw new ArgumentException();
             }
 
-            booking.ReturnTime = DateTime.Now;
+            booking.ReturnTime = DateTime.Now; // TODO: double check that list is being updated with return time
+
+            
         }
     }
 }
