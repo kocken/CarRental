@@ -82,22 +82,21 @@ namespace ConsoleClient
                         break;
 
                     case "createbooking":
-                        DateTime fromDate = GetDateTimeParameterInput("booking start time");
-                        DateTime toDate = GetDateTimeParameterInput("booking end time");
                         Logic.CreateBooking(
-                            GetObjectFromListInput(Logic.GetAvailableCars(fromDate, toDate), "car"),
-                            GetObjectFromListInput(Logic.GetCustomers(), "customer"),
-                            fromDate, toDate);
+                            GetObjectFromListInput(Logic.GetCars(), "car"),
+                            GetObjectFromListInput(Logic.GetCustomers(), "customer"), 
+                            GetDateTimeParameterInput("booking start time"),
+                            GetDateTimeParameterInput("booking end time"));
                         Console.WriteLine("Created booking");
                         break;
 
                     case "removebooking":
-                        Logic.RemoveBooking(GetObjectFromListInput(Logic.GetActiveBookings(false), "booking"));
+                        Logic.RemoveBooking(GetObjectFromListInput(Logic.GetBookings(), "booking"));
                         Console.WriteLine("Removed booking");
                         break;
 
                     case "returncar":
-                        Logic.ReturnCar(GetObjectFromListInput(Logic.GetActiveBookings(true), "booking"));
+                        Logic.ReturnCar(GetObjectFromListInput(Logic.GetBookings(), "booking"));
                         Console.WriteLine("Returned car");
                         break;
 
@@ -185,7 +184,7 @@ namespace ConsoleClient
         {
             if (list.Count == 0)
             {
-                throw new EmptyListException($"There's no available \"{parameterName}\" choices for this command.");
+                throw new EmptyListException($"There's no available \"{parameterName}\" choices.");
             }
             while (true)
             {
