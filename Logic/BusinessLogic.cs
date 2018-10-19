@@ -41,9 +41,14 @@ namespace Logic
             );
         }
 
-        public void RemoveCar(Car car) // remove existing object as done in #RemoveBooking below
+        public void RemoveCar(Car car)
         {
+            if (car == null || !Data.Cars.Contains(car))
+            {
+                throw new ArgumentException();
+            }
 
+            Data.Cars.Remove(car);
         }
 
         public void AddCustomer() // add new object (with string parameters) as done in #AddCar above
