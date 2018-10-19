@@ -57,8 +57,22 @@ namespace Logic
             Data.Cars.Remove(car); 
         }
 
-        public void AddCustomer()
+        public void AddCustomer(string firstName, string lastName, string telephoneNumber, string email)
         {
+            if (firstName == null || lastName == null || telephoneNumber == null || email == null)
+            {
+                throw new ArgumentException();
+            }
+
+            Data.Customers.Add(
+                new Customer
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    TelephoneNumber = telephoneNumber,
+                    Email = email
+                }
+            );
 
         }
 
@@ -67,8 +81,14 @@ namespace Logic
 
         }
 
-        public void RemoveCustomer()
+        public void RemoveCustomer(Customer customer)
         {
+            if (customer == null)
+            {
+                throw new ArgumentException();
+            }
+
+            Data.Customers.Remove(customer);
 
         }
 
