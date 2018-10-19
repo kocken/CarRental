@@ -47,14 +47,12 @@ namespace Logic
 
         public void RemoveCar(Car car)
         {
-            if (car.RegistrationNumber == null || car.RegistrationNumber.Length != 6 ||
-                car.Brand == null || car.Brand.Length == 0 ||
-                car.Model == null || car.Model.Length == 0 ||
-                car.Year < 1900 || car.Year > DateTime.Now.Year)
+            if (car == null)
             {
                 throw new ArgumentException();
             }
-            Data.Cars.Remove(car); 
+
+            Data.Cars.Remove(car);
         }
 
         public void AddCustomer(string firstName, string lastName, string telephoneNumber, string email)
@@ -76,9 +74,12 @@ namespace Logic
 
         }
 
-        public void ChangeCustomer()
+        public void ChangeCustomer(Customer customer, string firstName, string lastName, string telephoneNumber, string email)
         {
-
+            customer.FirstName = firstName;
+            customer.LastName = lastName;
+            customer.TelephoneNumber = telephoneNumber;
+            customer.Email = email;
         }
 
         public void RemoveCustomer(Customer customer)
