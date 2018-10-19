@@ -59,25 +59,31 @@ namespace Logic
 
         public void AddCustomer(string firstName, string lastName, string telephoneNumber, string email)
         {
-            if (firstName == null || lastName == null || telephoneNumber == null || email == null)
+            Customer customer = new Customer
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                TelephoneNumber = telephoneNumber,
+                Email = email
+            };
+            if (!customer.IsValid())
             {
                 throw new ArgumentException();
             }
 
-            Data.Customers.Add(
-                new Customer
-                {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    TelephoneNumber = telephoneNumber,
-                    Email = email
-                }
-            );
+            Data.Customers.Add(customer);
         }
 
-        public void ChangeCustomer(Customer customer) // change existing object as done in #ReturnCar below
+        public void ChangeCustomer(Customer customer, Customer newDetails)
         {
-
+            List<Customer> customers = GetCustomers();
+            if (customer == null || !customers.Contains(customer) || newDetails == null || !newDetails.IsValid())
+            {
+                throw new ArgumentException();
+            }
+            
+            int index = customers.FindIndex(c => c == customer);
+            customers[index] = newDetails;
         }
 
         public void RemoveCustomer(Customer customer)
@@ -131,7 +137,8 @@ namespace Logic
                     Car = car,
                     Customer = customer,
                     StartTime = startTime,
-                    EndTime = endTime
+                    EndTime = endTime,
+                    ReturnTime = default(DateTime)
                 }
             );
         }

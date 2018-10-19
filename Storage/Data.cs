@@ -10,7 +10,7 @@ namespace Storage
         public List<Customer> Customers = new List<Customer>();
         public List<Booking> Bookings = new List<Booking>();
 
-        public Data() // initialization class with start values
+        public Data() // initialization method with start values
         {
             Cars.Add(new Car
             {
@@ -56,15 +56,15 @@ namespace Storage
             Customers.Add(new Customer
             {
                 FirstName = "Joakim",
-                LastName = "Lars",
+                LastName = "Glensson",
                 TelephoneNumber = "0765874568",
                 Email = "abc@yahoo.se"
             });
 
             Customers.Add(new Customer
             {
-                FirstName = "Joakim",
-                LastName = "Lars",
+                FirstName = "Sara",
+                LastName = "Svensson",
                 TelephoneNumber = "0765874568",
                 Email = "joaklars@gmail.com"
             });

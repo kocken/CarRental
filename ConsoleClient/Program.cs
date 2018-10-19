@@ -79,6 +79,10 @@ namespace ConsoleClient
                         Console.WriteLine("Added customer");
                         break;
 
+                    case "changecustomer":
+                        // TODO
+                        break;
+
                     case "removecustomer":
                         Logic.RemoveCustomer(GetObjectFromListInput(Logic.GetCustomers(), "customer"));
                         Console.WriteLine("Removed customer");

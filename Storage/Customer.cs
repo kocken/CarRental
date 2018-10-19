@@ -15,5 +15,14 @@ namespace Storage
         {
             return $"{FirstName} {LastName} {Email} {TelephoneNumber}";
         }
+
+        public bool IsValid()
+        {
+            if (FirstName == null || LastName == null || TelephoneNumber == null || Email == null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
