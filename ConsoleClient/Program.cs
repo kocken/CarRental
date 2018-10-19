@@ -50,6 +50,7 @@ namespace ConsoleClient
                 switch (command)
                 {
                     case "quit":
+                        Environment.Exit(0);
                         return;
 
                     case "clear":
@@ -80,7 +81,15 @@ namespace ConsoleClient
                         break;
 
                     case "changecustomer":
-                        // TODO
+                        Logic.ChangeCustomer(
+                            GetObjectFromListInput(Logic.GetCustomers(), "customer"), 
+                            new Customer {
+                                FirstName = GetStringParameterInput("first name"),
+                                LastName = GetStringParameterInput("last name"),
+                                TelephoneNumber = GetStringParameterInput("telephone number"), 
+                                Email = GetStringParameterInput("email")
+                            });
+                        Console.WriteLine("Changed customer");
                         break;
 
                     case "removecustomer":
