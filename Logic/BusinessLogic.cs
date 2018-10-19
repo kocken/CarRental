@@ -47,28 +47,49 @@ namespace Logic
 
         public void RemoveCar(Car car)
         {
-            if (car.RegistrationNumber == null || car.RegistrationNumber.Length != 6 ||
-                car.Brand == null || car.Brand.Length == 0 ||
-                car.Model == null || car.Model.Length == 0 ||
-                car.Year < 1900 || car.Year > DateTime.Now.Year)
+            if (car == null)
             {
                 throw new ArgumentException();
             }
-            Data.Cars.Remove(car); 
+
+            Data.Cars.Remove(car);
         }
 
-        public void AddCustomer()
+        public void AddCustomer(string firstName, string lastName, string telephoneNumber, string email)
         {
+            if (firstName == null || lastName == null || telephoneNumber == null || email == null)
+            {
+                throw new ArgumentException();
+            }
+
+            Data.Customers.Add(
+                new Customer
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    TelephoneNumber = telephoneNumber,
+                    Email = email
+                }
+            );
 
         }
 
-        public void ChangeCustomer()
+        public void ChangeCustomer(Customer customer, string firstName, string lastName, string telephoneNumber, string email)
         {
-
+            customer.FirstName = firstName;
+            customer.LastName = lastName;
+            customer.TelephoneNumber = telephoneNumber;
+            customer.Email = email;
         }
 
-        public void RemoveCustomer()
+        public void RemoveCustomer(Customer customer)
         {
+            if (customer == null)
+            {
+                throw new ArgumentException();
+            }
+
+            Data.Customers.Remove(customer);
 
         }
 

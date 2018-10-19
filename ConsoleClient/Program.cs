@@ -11,7 +11,7 @@ namespace ConsoleClient
     {
         static BusinessLogic Logic = new BusinessLogic();
         static string[] Commands = new string[] { "Quit", "Clear",
-            "AddCar", "GetAvailableCars", "CreateBooking", "RemoveBooking", "ReturnCar" };
+            "AddCar", "RemoveCar","AddCustomer","ChangeCustomer","RemoveCustomer", "GetAvailableCars", "CreateBooking", "RemoveBooking", "ReturnCar" };
 
         static void Main(string[] args)
         {
@@ -61,6 +61,27 @@ namespace ConsoleClient
                             GetStringParameterInput("model"),
                             GetIntParameterInput("year"));
                         Console.WriteLine("Added car");
+                        break;
+
+                    case "removecar":
+                        Logic.RemoveCar(GetObjectFromListInput(Logic.GetCars(), "car"));
+                        Console.WriteLine("Removed car");
+                        break;
+
+                    case "addcustomer":
+                        Logic.AddCustomer(
+                            GetStringParameterInput("first name"),
+                            GetStringParameterInput("last name"),
+                            GetStringParameterInput("telephonenumber"),
+                            GetStringParameterInput("email"));
+                        Console.WriteLine("Added customer");
+                        break;
+
+                    
+
+                    case "removecustomer":
+                        Logic.RemoveCustomer(GetObjectFromListInput(Logic.GetCustomers(), "customer"));
+                        Console.WriteLine("Removed customer");
                         break;
 
                     case "getavailablecars":
