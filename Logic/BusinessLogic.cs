@@ -10,6 +10,11 @@ namespace Logic
     {
         Data Data = new Data();
 
+        public List<Car> GetCars()
+        {
+            return Data.Cars;
+        }
+
         public List<Customer> GetCustomers()
         {
             return Data.Customers;
@@ -17,22 +22,23 @@ namespace Logic
 
         public List<Booking> GetActiveBookings(bool isStarted)
         {
-            return Data.Bookings.Where(b => 
+            return Data.Bookings.Where(b =>
             b.ReturnTime == default(DateTime) && (isStarted ? b.IsStarted() : !b.IsStarted())).ToList();
         }
 
         public void AddCar(string registrationNumber, string brand, string model, int year)
         {
             if (registrationNumber == null || registrationNumber.Length != 6 ||
-                brand == null || brand.Length == 0 || 
-                model == null || model.Length == 0 || 
+                brand == null || brand.Length == 0 ||
+                model == null || model.Length == 0 ||
                 year < 1900 || year > DateTime.Now.Year)
             {
                 throw new ArgumentException();
             }
 
             Data.Cars.Add(
-                new Car {
+                new Car
+                {
                     RegistrationNumber = registrationNumber,
                     Brand = brand,
                     Model = model,
@@ -51,9 +57,22 @@ namespace Logic
             Data.Cars.Remove(car);
         }
 
-        public void AddCustomer() // add new object (with string parameters) as done in #AddCar above
+        public void AddCustomer(string firstName, string lastName, string telephoneNumber, string email)
         {
+            if (firstName == null || lastName == null || telephoneNumber == null || email == null)
+            {
+                throw new ArgumentException();
+            }
 
+            Data.Customers.Add(
+                new Customer
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    TelephoneNumber = telephoneNumber,
+                    Email = email
+                }
+            );
         }
 
         public void ChangeCustomer(Customer customer) // change existing object as done in #ReturnCar below
@@ -61,9 +80,14 @@ namespace Logic
 
         }
 
-        public void RemoveCustomer(Customer customer) // remove existing object as done in #RemoveBooking below
+        public void RemoveCustomer(Customer customer)
         {
+            if (customer == null || !Data.Customers.Contains(customer))
+            {
+                throw new ArgumentException();
+            }
 
+            Data.Customers.Remove(customer);
         }
 
         public List<Car> GetAvailableCars(DateTime fromDate, DateTime toDate)
@@ -95,14 +119,15 @@ namespace Logic
         {
             List<Car> availableCars = GetAvailableCars(startTime, endTime);
             if (car == null || customer == null || startTime == null || endTime == null || startTime > endTime ||
-                !Data.Cars.Contains(car) || !Data.Customers.Contains(customer) || 
+                !Data.Cars.Contains(car) || !Data.Customers.Contains(customer) ||
                 !availableCars.Contains(car)) // makes sure car is available
             {
                 throw new ArgumentException();
             }
 
             Data.Bookings.Add(
-                new Booking {
+                new Booking
+                {
                     Car = car,
                     Customer = customer,
                     StartTime = startTime,
@@ -121,10 +146,10 @@ namespace Logic
 
             Data.Bookings.Remove(booking);
         }
-        
+
         public void ReturnCar(Booking booking)
         {
-            if (booking == null || !Data.Bookings.Contains(booking) || 
+            if (booking == null || !Data.Bookings.Contains(booking) ||
                 booking.ReturnTime != default(DateTime)) // already returned car
             {
                 throw new ArgumentException();

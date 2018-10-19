@@ -11,7 +11,9 @@ namespace ConsoleClient
     {
         static BusinessLogic Logic = new BusinessLogic();
         static string[] Commands = new string[] { "Quit", "Clear",
-            "AddCar", "RemoveCar","AddCustomer","ChangeCustomer","RemoveCustomer", "GetAvailableCars", "CreateBooking", "RemoveBooking", "ReturnCar" };
+            "AddCar", "RemoveCar",
+            "AddCustomer", "ChangeCustomer", "RemoveCustomer",
+            "GetAvailableCars", "CreateBooking", "RemoveBooking", "ReturnCar" };
 
         static void Main(string[] args)
         {
@@ -19,7 +21,7 @@ namespace ConsoleClient
             {
                 Console.WriteLine("What would you like to do?");
                 Console.WriteLine("[COMMANDS]");
-                foreach(string s in Commands)
+                foreach (string s in Commands)
                 {
                     Console.WriteLine(s);
                 }
@@ -72,12 +74,10 @@ namespace ConsoleClient
                         Logic.AddCustomer(
                             GetStringParameterInput("first name"),
                             GetStringParameterInput("last name"),
-                            GetStringParameterInput("telephonenumber"),
+                            GetStringParameterInput("telephone number"),
                             GetStringParameterInput("email"));
                         Console.WriteLine("Added customer");
                         break;
-
-                    
 
                     case "removecustomer":
                         Logic.RemoveCustomer(GetObjectFromListInput(Logic.GetCustomers(), "customer"));
@@ -103,21 +103,22 @@ namespace ConsoleClient
                         break;
 
                     case "createbooking":
+                        DateTime fromDate = GetDateTimeParameterInput("booking start time");
+                        DateTime toDate = GetDateTimeParameterInput("booking end time");
                         Logic.CreateBooking(
-                            GetObjectFromListInput(Logic.GetCars(), "car"),
-                            GetObjectFromListInput(Logic.GetCustomers(), "customer"), 
-                            GetDateTimeParameterInput("booking start time"),
-                            GetDateTimeParameterInput("booking end time"));
+                            GetObjectFromListInput(Logic.GetAvailableCars(fromDate, toDate), "car"),
+                            GetObjectFromListInput(Logic.GetCustomers(), "customer"),
+                            fromDate, toDate);
                         Console.WriteLine("Created booking");
                         break;
 
                     case "removebooking":
-                        Logic.RemoveBooking(GetObjectFromListInput(Logic.GetBookings(), "booking"));
+                        Logic.RemoveBooking(GetObjectFromListInput(Logic.GetActiveBookings(false), "booking"));
                         Console.WriteLine("Removed booking");
                         break;
 
                     case "returncar":
-                        Logic.ReturnCar(GetObjectFromListInput(Logic.GetBookings(), "booking"));
+                        Logic.ReturnCar(GetObjectFromListInput(Logic.GetActiveBookings(true), "booking"));
                         Console.WriteLine("Returned car");
                         break;
 
@@ -138,7 +139,7 @@ namespace ConsoleClient
 
         public static string GetStringParameterInput(string parameterName)
         {
-            while(true)
+            while (true)
             {
                 Console.WriteLine($"Assign the \"{parameterName}\" parameter (Type: string)");
                 string input = Console.ReadLine();
@@ -205,14 +206,14 @@ namespace ConsoleClient
         {
             if (list.Count == 0)
             {
-                throw new EmptyListException($"There's no available \"{parameterName}\" choices.");
+                throw new EmptyListException($"There's no available \"{parameterName}\" choices for this command.");
             }
             while (true)
             {
                 Console.WriteLine($"Assign the \"{parameterName}\" parameter by selecting a number from the list");
                 for (int i = 0; i < list.Count; i++)
                 {
-                    Console.WriteLine((i+1) + ": " + list[i].ToString());
+                    Console.WriteLine((i + 1) + ": " + list[i].ToString());
                 }
                 string input = Console.ReadLine();
                 if (input.Length > 0)
