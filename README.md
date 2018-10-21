@@ -1,1 +1,2 @@
-# WCFStorage
+# CarRentalLibrary
+Class libraries (logic + storage) and a console test client for a car rental system. This project was made to be a base for a WCF project to communicate to. The car rental data is simply stored in the code (the Data object-initilization method) and through memory as the business logic methods modify lists and object values through calls made from the console client (and in the future through the WCF service calling business logic methods). This is knowingly a very poor data storage structure (compared to db or local file storage), but was made this way for simple testing purposes.
